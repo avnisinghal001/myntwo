@@ -5,11 +5,11 @@ export type NavItem = {
 };
 
 export const navItems: NavItem[] = [
-  { title: 'Dashboard', href: '/admin/dashboard', icon: 'Home' },
-  { title: 'Products', href: '/admin/products', icon: 'Box' },
-  { title: 'Upload Dataset', href: '/admin/upload', icon: 'UploadCloud' },
-  { title: 'Import Progress', href: '/admin/imports', icon: 'Clock' },
-  { title: 'Rejected Products', href: '/admin/rejected', icon: 'XCircle' },
-  { title: 'Taxonomy', href: '/admin/taxonomy', icon: 'Layers' },
-  { title: 'Settings', href: '/admin/settings', icon: 'Settings' }
+  { title: 'Dashboard', href: '/dashboard', icon: 'Home' },
+  { title: 'Products', href: '/products', icon: 'Box' },
+  { title: 'Upload Dataset', href: '/upload', icon: 'UploadCloud' },
+  { title: 'Import Progress', href: '/imports', icon: 'Clock' },
+  { title: 'Rejected Products', href: '/rejected', icon: 'XCircle' },
+  { title: 'Taxonomy', href: '/taxonomy', icon: 'Layers' },
+  { title: 'Settings', href: '/settings', icon: 'Settings' }
 ];

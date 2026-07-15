@@ -1,6 +1,6 @@
 'use client';
 
-import { FC, PropsWithChildren } from 'react';
+import { FC, PropsWithChildren, useState } from 'react';
 import Sidebar from './Sidebar';
 import Navbar from './Navbar';
 import { navItems } from '@/components/navigation/Navigation';
@@ -8,6 +8,7 @@ import { usePathname } from 'next/navigation';
 
 export const DashboardLayout: FC<PropsWithChildren<Record<string, unknown>>> = ({ children }) => {
   const pathname = usePathname() || '';
+  const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false);
 
   // Determine title from nav items
   const active = navItems.find(n => pathname.startsWith(n.href));
@@ -22,23 +23,34 @@ export const DashboardLayout: FC<PropsWithChildren<Record<string, unknown>>> = (
   }, []);
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <Sidebar />
+    <div className="flex min-h-dvh bg-gray-50">
+      <Sidebar
+        mobileOpen={mobileSidebarOpen}
+        onNavigate={() => setMobileSidebarOpen(false)}
+      />
 
-      <div className="md:pl-64">
-        <div className="ml-0 md:ml-0">
-          <div className="sticky top-0 z-10 bg-transparent">
-            <Navbar title={title} breadcrumbItems={crumbs} />
-          </div>
+      {mobileSidebarOpen && (
+        <button
+          aria-label="Close navigation menu"
+          className="fixed inset-0 z-30 bg-black/30 md:hidden"
+          onClick={() => setMobileSidebarOpen(false)}
+        />
+      )}
 
-          <main className="p-4 md:p-8">
-            <div className="max-w-full">
-              <div className="bg-white border border-gray-100 rounded-lg p-6 shadow-sm">
-                {children}
-              </div>
+      <div className="min-w-0 flex-1 md:ml-64">
+        <Navbar
+          title={title}
+          breadcrumbItems={crumbs}
+          onMenuToggle={() => setMobileSidebarOpen(true)}
+        />
+
+        <main className="p-4 sm:p-6 lg:p-8">
+          <div className="mx-auto w-full max-w-7xl">
+            <div className="rounded-xl border border-gray-100 bg-white p-4 shadow-sm sm:p-6">
+              {children}
             </div>
-          </main>
-        </div>
+          </div>
+        </main>
       </div>
     </div>
   );

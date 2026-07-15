@@ -1,24 +1,32 @@
 'use client';
 
 import { FC, useState } from 'react';
-import { Bell, Search, ChevronDown } from 'lucide-react';
+import { Bell, Search, ChevronDown, Menu } from 'lucide-react';
 import { Avatar } from '@/components/common/Avatar';
 import Breadcrumb from '@/components/common/Breadcrumb';
 
 type Props = {
   title?: string;
   breadcrumbItems?: { href: string; label: string }[];
+  onMenuToggle?: () => void;
 };
 
-export const Navbar: FC<Props> = ({ title, breadcrumbItems = [] }) => {
+export const Navbar: FC<Props> = ({ title, breadcrumbItems = [], onMenuToggle }) => {
   const [open, setOpen] = useState(false);
 
   return (
-    <header className="bg-transparent border-b border-gray-100">
-      <div className="max-w-full mx-auto px-4 md:px-6 lg:px-8">
+    <header className="sticky top-0 z-20 border-b border-gray-200 bg-white/95 backdrop-blur supports-[backdrop-filter]:bg-white/80">
+      <div className="px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16 gap-4">
           <div className="flex-1 min-w-0">
             <div className="flex items-center gap-4">
+              <button
+                aria-label="Open navigation menu"
+                className="rounded-md p-2 text-gray-600 hover:bg-gray-100 md:hidden"
+                onClick={onMenuToggle}
+              >
+                <Menu className="h-5 w-5" />
+              </button>
               <div>
                 <h1 className="text-lg font-semibold text-gray-900">{title}</h1>
                 {breadcrumbItems.length > 0 && <div className="mt-1"><Breadcrumb items={breadcrumbItems} /></div>}
