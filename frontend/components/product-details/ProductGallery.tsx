@@ -1,24 +1,26 @@
-import { ImageIcon } from 'lucide-react';
+'use client';
 
-import type { Product } from '@/lib/mock-products';
+import { ImageIcon } from 'lucide-react';
+import { useState } from 'react';
+
+import { ProductImage } from '@/components/shared/ProductImage';
+import type { Product } from '@/types/product';
 
 export function ProductGallery({ product }: { product: Product }) {
-  const galleryImages = [product.imageUrl, product.imageUrl, product.imageUrl, product.imageUrl];
+  const images = [product.img];
+  const [activeImage, setActiveImage] = useState(images[0]);
 
   return (
     <section className="rounded-xl border bg-card p-4" aria-label="Product images">
-      <div className="flex aspect-square items-center justify-center overflow-hidden rounded-lg border bg-muted/30">
-        <img src={product.imageUrl} alt={product.productName} className="h-full w-full object-cover" />
-      </div>
-      <div className="mt-3 grid grid-cols-4 gap-2">
-        {galleryImages.map((image, index) => (
-          <button key={`${product.id}-image-${index}`} type="button" className="relative aspect-square overflow-hidden rounded-md border bg-muted/30 ring-offset-background hover:ring-2 hover:ring-ring focus-visible:ring-2 focus-visible:ring-ring" aria-label={`View product image ${index + 1}`}>
-            <img src={image} alt="" className="h-full w-full object-cover" />
-            {index === 0 && <span className="absolute inset-0 rounded-md ring-2 ring-primary ring-inset" />}
+      <ProductImage imageUrl={activeImage} productName={product.name} width={720} height={720} priority />
+      <div className="mt-3 flex gap-2">
+        {images.map((image, index) => (
+          <button key={`${product.id}-${image}-${index}`} type="button" onClick={() => setActiveImage(image)} className={`w-16 overflow-hidden rounded-md border p-0.5 focus-visible:ring-2 focus-visible:ring-ring ${activeImage === image ? 'border-primary ring-1 ring-primary' : 'border-transparent'}`} aria-label={`View product image ${index + 1}`}>
+            <ProductImage imageUrl={image} productName={`${product.name} thumbnail`} width={64} height={64} />
           </button>
         ))}
       </div>
-      <div className="mt-3 flex items-center gap-2 text-xs text-muted-foreground"><ImageIcon className="size-3.5" />4 product images</div>
+      <p className="mt-3 flex items-center gap-2 text-xs text-muted-foreground"><ImageIcon className="size-3.5" />{images.length} product image</p>
     </section>
   );
 }

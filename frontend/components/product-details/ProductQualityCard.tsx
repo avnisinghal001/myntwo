@@ -1,7 +1,7 @@
 import { BadgeCheck, ClipboardCheck } from 'lucide-react';
 
 import { ProductStatusBadge } from '@/components/products/ProductStatusBadge';
-import type { Product } from '@/lib/mock-products';
+import type { Product } from '@/types/product';
 
 export function ProductQualityCard({ product }: { product: Product }) {
   return (

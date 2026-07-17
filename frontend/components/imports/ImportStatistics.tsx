@@ -1,44 +1,19 @@
-type ImportStatisticsProps = {
+import { CheckCircle2, CircleSlash2, SkipForward, XCircle } from 'lucide-react';
+
+interface ImportStatisticsProps {
   total: number;
+  imported: number;
   successful: number;
-  failed: number;
-};
-
-const numberFormatter = new Intl.NumberFormat('en-IN');
-
-export function ImportStatistics({ total, successful, failed }: ImportStatisticsProps) {
-  const successRate = ((successful / total) * 100).toFixed(1);
-  const failureRate = ((failed / total) * 100).toFixed(1);
-
-  return (
-    <section className="rounded-2xl border border-gray-200 bg-white p-6 shadow-sm">
-      <div>
-        <h3 className="text-base font-semibold text-gray-900">Import statistics</h3>
-        <p className="mt-1 text-sm text-gray-500">Live snapshot of this import run.</p>
-      </div>
-
-      <dl className="mt-6 space-y-5">
-        <Statistic label="Success rate" value={`${successRate}%`} barClass="bg-emerald-500" percentage={Number(successRate)} />
-        <Statistic label="Failure rate" value={`${failureRate}%`} barClass="bg-rose-500" percentage={Number(failureRate)} />
-        <div className="flex items-center justify-between border-t border-gray-100 pt-5 text-sm">
-          <dt className="text-gray-500">Products in this file</dt>
-          <dd className="font-semibold text-gray-900">{numberFormatter.format(total)}</dd>
-        </div>
-      </dl>
-    </section>
-  );
+  rejected: number;
+  skipped: number;
 }
 
-function Statistic({ label, value, percentage, barClass }: { label: string; value: string; percentage: number; barClass: string }) {
-  return (
-    <div>
-      <div className="flex justify-between text-sm">
-        <dt className="text-gray-500">{label}</dt>
-        <dd className="font-semibold text-gray-900">{value}</dd>
-      </div>
-      <div className="mt-2 h-2 overflow-hidden rounded-full bg-gray-100">
-        <div className={`h-full rounded-full ${barClass}`} style={{ width: `${percentage}%` }} />
-      </div>
-    </div>
-  );
+export function ImportStatistics({ total, imported, successful, rejected, skipped }: ImportStatisticsProps) {
+  const items = [
+    { label: 'Total imported', value: imported, icon: CircleSlash2, className: 'text-blue-600' }, { label: 'Successful', value: successful, icon: CheckCircle2, className: 'text-emerald-600' },
+    { label: 'Rejected', value: rejected, icon: XCircle, className: 'text-rose-600' }, { label: 'Skipped', value: skipped, icon: SkipForward, className: 'text-amber-600' },
+  ];
+  const completion = Math.round((imported / total) * 100);
+
+  return <section className="rounded-xl border bg-card p-5"><h2 className="text-base font-semibold text-foreground">Import statistics</h2><p className="mt-1 text-sm text-muted-foreground">Current run breakdown.</p><div className="mt-5 grid gap-3 sm:grid-cols-2 xl:grid-cols-1">{items.map(({ label, value, icon: Icon, className }) => <div key={label} className="flex items-center gap-3 rounded-lg bg-muted/40 p-3"><Icon className={`size-5 ${className}`} /><div><p className="text-lg font-semibold text-foreground">{value.toLocaleString('en-IN')}</p><p className="text-xs text-muted-foreground">{label}</p></div></div>)}</div><div className="mt-5 border-t pt-4"><div className="flex justify-between text-sm"><span className="text-muted-foreground">Completion</span><span className="font-medium text-foreground">{completion}%</span></div><div className="mt-2 h-2 overflow-hidden rounded-full bg-muted"><div className="h-full rounded-full bg-emerald-500" style={{ width: `${completion}%` }} /></div></div></section>;
 }
